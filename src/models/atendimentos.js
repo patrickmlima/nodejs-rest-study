@@ -80,7 +80,11 @@ class Atendimento {
             if (err) {
                 return res.status(400).json(err);
             }
-            return res.status(200).json(result);
+            return res.status(200).json({
+                id,
+                data: values,
+                message: `Changed values on registry with ID [${id}]`
+            });
         });
     }
 
