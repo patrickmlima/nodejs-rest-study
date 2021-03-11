@@ -27,7 +27,7 @@ class Atendimento {
         if (errors.length > 0) {
             return res.status(400).json(errors);
         }
-        
+
         const atendimentoDatado = { ...atendimento, data_criacao: created, data};
 
         const sql = 'INSERT INTO atendimentos SET ?';
@@ -38,6 +38,28 @@ class Atendimento {
             } else {
                 res.status(201).json(result);
             }
+        });
+    }
+
+    list(res) {
+        const sql = `SELECT * FROM atendimentos`;
+
+        dbConnection.query(sql, (err, list) => {
+            if (err) {
+                return res.status(400).json(err);
+            }
+            return res.status(200).json(list);
+        });
+    }
+
+    getOne(id, res) {
+        const sql = 'SELECT * FROM atendimentos WHERE id = ?';
+
+        dbConnection.query(sql, id, (err, atendimento) => {
+            if (err) {
+                return res.status(400).json(err);
+            }
+            return res.status(200).json(atendimento[0]);
         });
     }
 }
