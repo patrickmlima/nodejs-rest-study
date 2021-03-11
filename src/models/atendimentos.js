@@ -3,9 +3,15 @@ const moment = require('moment');
 const dbConnection = require('../db/connection');
 
 class Atendimento {
+    _formatDate(atendimento) {
+        if (atendimento.data) {
+            return moment(atendimento.data, 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:SS');
+        }
+    }
+
     adiciona(atendimento, res) {
         const created = moment().format('YYYY-MM-DD HH:mm:SS');
-        const data = moment(atendimento.data, 'DD/MM/YYYY').format('YYYY-MM-DD HH:mm:SS');
+        const data = this._formatDate(atendimento);
 
         const isValidDate = moment(data).isSameOrAfter(created);
         const isClientValid = atendimento.cliente.length >= 5;
@@ -60,6 +66,21 @@ class Atendimento {
                 return res.status(400).json(err);
             }
             return res.status(200).json(atendimento[0]);
+        });
+    }
+
+    update(id, values, res) {
+        const data = this._formatDate(values);
+        if (data) {
+            values = { ...values, data };
+        }
+
+        const sql = 'UPDATE atendimentos SET ? WHERE id = ?';
+        dbConnection.query(sql, [values, id], (err, result) => {
+            if (err) {
+                return res.status(400).json(err);
+            }
+            return res.status(200).json(result);
         });
     }
 }
