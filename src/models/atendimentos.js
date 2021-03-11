@@ -83,6 +83,20 @@ class Atendimento {
             return res.status(200).json(result);
         });
     }
+
+    delete(id, res) {
+        const sql = 'DELETE FROM atendimentos WHERE id = ?';
+
+        dbConnection.query(sql, id, (err, result) => {
+            if (err) {
+                return res.status(400).json(err);
+            }
+            return res.status(200).json({
+                id,
+                message: `Removed data with ID [${id}]`
+            });
+        });
+    }
 }
 
 module.exports = new Atendimento;

@@ -21,4 +21,11 @@ module.exports = (app) => {
        
        Atendimento.update(id, payload, res);
     });
+
+    app.delete('/atendimentos/:id', (req, res) => {
+        const id = parseInt(req.params.id);
+        const payload = req.body;
+        
+        Atendimento.delete(id, res);
+     });
 }
